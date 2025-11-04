@@ -12,4 +12,4 @@ while True:
         str_unicode = str_bytes.decode('UTF-8')
         print(str_bytes) # 셀로 bytes 형식 문자열 출력
         # UART 통신으로 컴퓨터로 변환된 문자열 출력
-        computer.write('=> ' + str_unicode)w
+        computer.write('=> ' + str_unicode)
