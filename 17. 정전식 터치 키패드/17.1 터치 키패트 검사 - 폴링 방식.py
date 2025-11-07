@@ -9,7 +9,7 @@ while True:
     state = mpr.touched() # 12개 센서 상태 읽기
     print('{0:5d}: '.format(state), end='')
 
-for e in range(12): # 비트벼로 센서 상태 출력
+for e in range(12): # 비트별로센서 상태 출력
     if state & (1 << e):
         print('0', end='')
     else:
