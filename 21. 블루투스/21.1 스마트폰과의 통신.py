@@ -1,4 +1,5 @@
 from machine import Pin, UART, Timer
+
 uart = UART(0, 9600, timeout=100) # 0번 UART 포트
 bt_timer = Timer() # 타이머 객체 생성
 
