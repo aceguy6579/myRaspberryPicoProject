@@ -4,21 +4,27 @@ import utime
 
 def extract_data(response, field): # 필드 데이터 추출
     index_from = response.find('<' + field + '>')
-    index_to = response.find('<' + field + '>')
+    index_to = response.find('</' + field + '>')
 
-    data = response[(index_from + 2 + len(field)):index_to]
+    if index_from == -1 or index_to == -1:
+        return "N/A"
+    
+    index_from += len('<' + field + '>')
 
-    return data
+    return response[index_from:index_to]
 
 def print_info(response):
-    date_time = extract_data(response, 'stateDt') # 기준 날짜
+    date_time = extract_data(response, 'statusDt') # 기준 날짜
     print(date_time)
 
-    death_count = extract_data(response, 'deathCnt') # 사망자 수
-    print('\t사망자 수\t: ' + death_count)
-
-    decide_count = extract_data(response, 'decideCnt') # 확진자 수
+    decide_count = extract_data(response, 'hPntCnt') # 확진자수
     print('\t확진자 수\t: ' + decide_count)
+
+    release_count = extract_data(response, 'dPntCnt') # 격리 해제수
+    print('\t격리해제 수\t: ' + release_count)
+
+    death_count = extract_data(response, 'gPntCnt') # 사망자수
+    print('\t사망자 수\t: ' + death_count)
 
     print("")
 
@@ -41,12 +47,20 @@ print("")
 print("Now you are connected...")
 print("")
 
-startCreateDate = "20211210" # 데이터 검색 시작 날짜
-endCreateDate = "20211211" # 데이터 검색 끝 날짜
+for count in range(10): 
+    url = ("serviceKey=" + myWiFi.dataPortalKey + 
+           "&pageNo=1"
+           "&numOfRows=500"
+           "&apiType=xml"
+           "&status_dt=20200425"
+           )
 
-for count in range(10): # 10회 날씨 정보 요청
     # GET 방식의 HTTP 요청
-    httpCode, httpRes = esp01.doHttpGet("openapi.data.go.kr")
+    httpCode, httpRes = esp01.doHttpGet(
+        "apis.data.go.kr", 
+        "/1352000/ODMS_COVID_02/callCovid02Api?" + url
+        )
+    
     print("HTTP Code:", httpCode) # 응답 코드
     print("HTTP Response:", httpRes) # 응답 내용
     print("")
